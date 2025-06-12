@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
+import { usePortfolio } from '../../context/PortfolioContext';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { portfolioData } = usePortfolio();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  // Get the name from portfolio data, or fallback to 'Portfolio'
+  const name = portfolioData?.personalInfo?.name || 'Portfolio';
 
   return (
     <header>
@@ -14,7 +19,7 @@ const Header: React.FC = () => {
           {/* Flex container for name and links */}
           <div className="flex items-center space-x-8">
             {/* Name section */}
-            <a className="font-bold text-xl" href="/">YOUR NAME</a>
+            <a className="font-bold text-xl" href="/">{name}</a>
 
             {/* Desktop navigation links (left-aligned) */}
             <div className="hidden lg:flex" id="navbarNav">
@@ -51,14 +56,16 @@ const Header: React.FC = () => {
                     Projects
                   </a>
                 </li>
-                <li>
-                  <a 
-                    className="text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline hover:scale-110 inline-block" 
-                    href="#blogs"
-                  >
-                    Blogs
-                  </a>
-                </li>
+                {portfolioData?.blogs && portfolioData.blogs.length > 0 && (
+                  <li>
+                    <a 
+                      className="text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline hover:scale-110 inline-block" 
+                      href="#blogs"
+                    >
+                      Blogs
+                    </a>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -88,6 +95,7 @@ const Header: React.FC = () => {
                 <a 
                   className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline" 
                   href="#home"
+                  onClick={() => setIsOpen(false)}
                 >
                   Home
                 </a>
@@ -96,6 +104,7 @@ const Header: React.FC = () => {
                 <a 
                   className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline" 
                   href="#experience"
+                  onClick={() => setIsOpen(false)}
                 >
                   Experience
                 </a>
@@ -104,6 +113,7 @@ const Header: React.FC = () => {
                 <a 
                   className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline" 
                   href="#skills"
+                  onClick={() => setIsOpen(false)}
                 >
                   Skills
                 </a>
@@ -112,18 +122,22 @@ const Header: React.FC = () => {
                 <a 
                   className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline" 
                   href="#projects"
+                  onClick={() => setIsOpen(false)}
                 >
                   Projects
                 </a>
               </li>
-              <li>
-                <a 
-                  className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline" 
-                  href="#blogs"
-                >
-                  Blogs
-                </a>
-              </li>
+              {portfolioData?.blogs && portfolioData.blogs.length > 0 && (
+                <li>
+                  <a 
+                    className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline" 
+                    href="#blogs"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Blogs
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
         )}

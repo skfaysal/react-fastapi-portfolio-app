@@ -1,65 +1,66 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ExperienceCard from "./ExperienceCard";
-
-const experiences = [
-  {
-    title: "Sr. Machine Learning Engineer",
-    company: "IQVIA",
-    location: "Dhaka",
-    dateRange: "03/2024 to present",
-    description: [
-      "Migrated ML algorithms from Kubeflow to SageMaker Pipeline with MLflow integration for enhanced model management.",
-      "Implemented Multi-Agentic AI for data augmentation and created synthetic data to fine-tune LLM, enhancing its accuracy and robustness.",
-      "Developed GitLab CI/CD pipelines and unit tests to improve code quality and deployment processes."
-    ],
-    logoUrl: "/iqvia-logo.png",
-    websiteUrl: "#"
-  },
-  {
-    title: "Lead Data Scientist",
-    company: "SELISE Digital Platforms ltd.",
-    location: "Dhaka, Bangladesh",
-    dateRange: "04/2022 – 03/2024",
-    description: [
-      "Implemented Deep Learning techniques to identify various in-game events in FIFAe game streams/videos.",
-      "Led a project converting 16:9 footage to mobile-friendly 9:16 with intelligent motion tracking for scene relevance and signal processing for seamless transitions.",
-      "Video stream embedding extraction through OpenAI's CLIP and VIT. Completed the 1st version, incorporating clustering to group similar scenes across all stream chunks.",
-      "Integrated MLflow, Airflow throughout training and production pipelines for comprehensive machine learning lifecycle management."
-    ],
-    logoUrl: "/selise-logo.png",
-    websiteUrl: "#"
-  },
-  {
-    title: "Machine Learning Engineer",
-    company: "Smart Retina Ltd.",
-    location: "Dhaka, Bangladesh",
-    dateRange: "11/2020 – 02/2022",
-    description: [
-      "Attained 92% sensitivity in Diabetic Retinopathy classification from fundus images.",
-      "Employed GradCam for precise model interpretation, pinpointing fundus image ROIs to aid ophthalmologists.",
-      "Demonstrated a 3.2% accuracy boost in DR classification through Ensemble methods.",
-      "Achieved 98% accuracy in classifying Left/Right fundus images.",
-      "Image clustering based on learned model features."
-    ],
-    logoUrl: "/smart-retina-logo.png",
-    websiteUrl: "#"
-  },
-  {
-    title: "Machine Learning Engineer",
-    company: "Daffodil Software Ltd.",
-    location: "Dhaka, Bangladesh",
-    dateRange: "10/2019 – 10/2020",
-    description: [
-      "Led a pilot project under the ICT Ministry of Bangladesh achieving 96% sensitivity in detecting Covid-19 and Pneumonia from chest X-rays and CT scans.",
-      "Attained 98% accuracy in predicting student dropouts, resulting in a 2% reduction in retention rate over 2 semesters.",
-      "Created a sentiment analysis model achieving 90% accuracy in evaluating mentor feedback to students."
-    ],
-    logoUrl: "/daffodil-logo.png",
-    websiteUrl: "#"
-  }
-];
+import { getExperiences } from "../../services/api";
+import { Experience as ExperienceType } from "../../types/api";
+import Loader from "../common/Loader";
 
 const Experience: React.FC = () => {
+  const [experiences, setExperiences] = useState<ExperienceType[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchExperiences = async () => {
+      try {
+        const data = await getExperiences();
+        setExperiences(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching experiences:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load experiences');
+        setLoading(false);
+      }
+    };
+    
+    fetchExperiences();
+  }, []);
+
+  if (loading) {
+    return (
+      <div id="experience" className="bg-gray-50 sm:px-1 md:px-5 xl:px-20 rounded-lg">
+        <div className="container py-20 flex justify-center">
+          <Loader size="lg" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div id="experience" className="bg-gray-50 sm:px-1 md:px-5 xl:px-20 rounded-lg">
+        <div className="container py-10 text-center">
+          <h2 className="text-2xl font-light mb-4">Experience</h2>
+          <div className="text-red-500">
+            Error loading experiences: {error}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!experiences || experiences.length === 0) {
+    return (
+      <div id="experience" className="bg-gray-50 sm:px-1 md:px-5 xl:px-20 rounded-lg">
+        <div className="container py-10 text-center">
+          <h2 className="text-2xl font-light mb-4">Experience</h2>
+          <div className="text-gray-500">
+            No experience data available.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       id="experience"

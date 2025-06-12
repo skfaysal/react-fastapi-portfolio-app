@@ -1,8 +1,10 @@
 ## About Frontend
 
-"This is a frontend project for a personal portfolio application. It is built using React as the primary JavaScript library for building user interfaces. The development server and build tool is Vite, indicating a modern and fast development setup. The project is primarily written in TypeScript, ensuring type safety and improved code quality. For styling, it utilizes Tailwind CSS, a utility-first CSS framework, configured via `tailwind.config.js` and `postcss.config.js`. Dependencies are managed using npm, as indicated by `package.json` and `package-lock.json`. The application's entry point is `index.html` in the `public` directory, and the main application logic resides within the `src/` directory, which likely contains React components, hooks, and other related modules. The project also includes ESLint for code linting and standard TypeScript configuration files (`tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`). The `.gitignore` file indicates standard exclusions for a Node.js/React project."
+"This is a frontend project for a personal portfolio application. It is built using React as the primary JavaScript library for building user interfaces. The development server and build tool is Vite, indicating a modern and fast development setup. The project is primarily written in TypeScript, ensuring type safety and improved code quality. For styling, it utilizes Tailwind CSS, a utility-first CSS framework, configured via `tailwind.config.js` and `postcss.config.js`."
 
-
+The application is designed to be dynamic, with content managed through an API. It can operate in two modes:
+1. API Mode - loading content from a backend API
+2. Mock Mode - using hardcoded data for development or when the API is unavailable
 
 ## How to execute frontend
 
@@ -19,7 +21,7 @@ Make sure you have **Node.js** and **npm** (or **yarn**) installed.
 
 2. Navigate to the project directory:
     ```bash
-    cd frontend
+    cd react-fastapi-portfolio-app/frontend
     ```
 
 3. Install dependencies:
@@ -27,14 +29,48 @@ Make sure you have **Node.js** and **npm** (or **yarn**) installed.
     npm install
     ```
 
-4. Start the development server:
+4. Create environment file:
+    ```bash
+    cp .env.example .env
+    ```
+   Edit the `.env` file to configure your API settings:
+   - `VITE_API_BASE_URL`: URL of your backend API
+   - `VITE_USE_MOCK_DATA`: Set to `true` to use mock data instead of API calls
+
+5. Start the development server:
     ```bash
     npm run dev
     ```
 
-5. Open your browser and go to:
+6. Open your browser and go to:
     ```
     http://localhost:5173
     ```
+
+### Testing
+
+Run the test suite with:
+```bash
+npm test
+```
+
+For test coverage report:
+```bash
+npm run test:coverage
+```
+
+For the visual test UI:
+```bash
+npm run test:ui
+```
+
+## API Integration
+
+The frontend is designed to work with a FastAPI backend that provides the following endpoints:
+
+- `GET /api/portfolio`: Returns all portfolio data including personal info, experiences, skills, projects, etc.
+- `POST /chat/`: Accepts a chat message and returns a response from the AI assistant
+
+When the backend API is not available, the application falls back to using mock data defined in `src/services/api.ts`.
 
 

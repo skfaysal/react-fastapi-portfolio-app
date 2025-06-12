@@ -1,22 +1,54 @@
-import React from "react";
-
-// Example blog data (replace with your own or fetch dynamically)
-const blogs = [
-  {
-    title: "Serve Machine Learning models using Django REST API Part 1",
-    url: "https://www.linkedin.com/pulse/serve-machine-learning-models-using-django-rest-api-part-md-faysal/?trackingId=BHRBhJDKQuuF4V3okBUoLg%3D%3D",
-    description: "This series shows hands-on steps for productionizing ML models: 1. Train a Machine Learning model 2. Create a REST API using Django 3. Dockerize and deploy the REST API.",
-    thumbnailUrl: "/blog1-thumbnail.jpg" // Replace with actual thumbnail URL
-  }
-];
+import React, { useState, useEffect } from "react";
+import { getBlogs } from "../services/api";
+import { Blog } from "../types/api";
+import Loader from "./common/Loader";
 
 const Blogs: React.FC = () => {
+  const [blogs, setBlogs] = useState<Blog[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const data = await getBlogs();
+        setBlogs(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching blogs:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load blogs');
+        setLoading(false);
+      }
+    };
+    
+    fetchBlogs();
+  }, []);
+
+  // If loading, show a loader
+  if (loading) {
+    return (
+      <section id="blogs" className="py-10 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto text-center px-4">
+          <h2 className="text-2xl font-bold mb-8">Blogs</h2>
+          <div className="flex justify-center">
+            <Loader size="lg" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // If no blogs or error, don't render the section
+  if (!blogs || blogs.length === 0 || error) {
+    return null;
+  }
+
   return (
     <section id="blogs" className="py-10 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl font-bold text-center mb-8">Blogs</h2>
         {/* Adjust grid for potentially one item or use different layout */}
-        <div className="grid grid-cols-1 gap-6 max-w-sm mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {blogs.map((blog, idx) => (
             <div
               key={idx}
@@ -53,4 +85,4 @@ const Blogs: React.FC = () => {
   );
 };
 
-export default Blogs; 
+export default Blogs;

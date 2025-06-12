@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import { sendChatMessage } from '../../services/api';
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,22 +27,24 @@ const ChatBot: React.FC = () => {
     if (message.trim() === '') return;
     
     setLoading(true);
-    setChatLog((prevLog) => [...prevLog, { sender: 'You', text: message }]);
+    const userMessage = message.trim();
+    setChatLog((prevLog) => [...prevLog, { sender: 'You', text: userMessage }]);
+    setMessage(''); // Clear input field immediately for better UX
 
     try {
-      const response = await axios.post('http://localhost:8000/chat/', {
-        query: message,
-      });
+      const response = await sendChatMessage(userMessage);
 
-      if (response.data.response) {
-        setChatLog((prevLog) => [...prevLog, { sender: 'Bot', text: response.data.response }]);
+      if (response.response) {
+        setChatLog((prevLog) => [...prevLog, { sender: 'Bot', text: response.response }]);
+      } else {
+        throw new Error('Invalid response format');
       }
     } catch (error) {
+      console.error('Chat API error:', error);
       setChatLog((prevLog) => [...prevLog, { sender: 'Bot', text: 'Something went wrong. Please try again later.' }]);
+    } finally {
+      setLoading(false);
     }
-
-    setMessage('');
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -65,22 +67,39 @@ const ChatBot: React.FC = () => {
         <div className="fixed bottom-20 right-4 w-11/12 max-w-lg bg-white rounded-xl shadow-2xl flex flex-col p-4 border border-gray-300 md:max-w-xl lg:max-w-2xl z-50">
           {/* Chat Log */}
           <div ref={chatLogRef} className="flex-1 overflow-y-auto mb-4 space-y-4 max-h-[60vh] pr-4">
-            {chatLog.map((msg, index) => (
-              <div
-                key={index}
-                className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}
-              >
+            {chatLog.length === 0 ? (
+              <div className="text-center text-gray-500 italic my-8">
+                How can I help you today?
+              </div>
+            ) : (
+              chatLog.map((msg, index) => (
                 <div
-                  className={`${
-                    msg.sender === 'You'
-                      ? 'bg-gray-500 text-white ml-10'
-                      : 'bg-gray-100 text-gray-800 mr-10'
-                  } p-3 rounded-xl shadow-sm w-auto max-w-xs`}
+                  key={index}
+                  className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <p className="text-xs md:text-sm">{msg.text}</p>
+                  <div
+                    className={`${
+                      msg.sender === 'You'
+                        ? 'bg-gray-500 text-white ml-10'
+                        : 'bg-gray-100 text-gray-800 mr-10'
+                    } p-3 rounded-xl shadow-sm w-auto max-w-xs`}
+                  >
+                    <p className="text-xs md:text-sm">{msg.text}</p>
+                  </div>
+                </div>
+              ))
+            )}
+            {loading && (
+              <div className="flex justify-start">
+                <div className="bg-gray-100 text-gray-800 p-3 rounded-xl shadow-sm">
+                  <div className="flex space-x-2">
+                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce"></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                  </div>
                 </div>
               </div>
-            ))}
+            )}
           </div>
 
           {/* Input Area */}
@@ -92,10 +111,11 @@ const ChatBot: React.FC = () => {
               onChange={handleInputChange}
               onKeyUp={handleKeyPress}
               placeholder="Ask me anything..."
+              disabled={loading}
             ></textarea>
             <button
               onClick={sendMessage}
-              disabled={loading}
+              disabled={loading || message.trim() === ''}
               className="ml-2 px-4 py-2 bg-gray-500 text-white rounded-lg shadow-sm focus:outline-none hover:bg-gray-700 transition-all duration-300 ease-in-out disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {loading ? (
