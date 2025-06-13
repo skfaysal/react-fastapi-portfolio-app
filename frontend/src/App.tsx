@@ -9,7 +9,7 @@ import Header from './components/Header/Header'
 import Landing from './components/Landing/Landing'
 import ProjectList from './components/Projects/ProjectList'
 import Skills from './components/Skills/Skills'
-import Blogs from './components/Blogs'
+import BlogsList from './components/Blogs'
 import { getPersonalInfo, getMockPortfolioData } from './services/api'
 
 function App() {
@@ -77,7 +77,7 @@ function App() {
       <Experience />
       <Skills />
       <ProjectList />
-      <Blogs />
+      <BlogsList />
       <Footer />
       <ChatBot />
       <Analytics />
