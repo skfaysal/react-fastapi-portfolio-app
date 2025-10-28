@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import Loader from '../common/Loader';
 import { Certification, Education } from '../../types/api';
+import { getAboutMe, AboutMeData } from '../../services/api';
 
 const Landing: React.FC = () => {
   const { portfolioData, loading, error } = usePortfolio();
+  const [aboutMeData, setAboutMeData] = useState<AboutMeData | null>(null);
+  const [aboutMeLoading, setAboutMeLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAboutMe = async () => {
+      try {
+        const data = await getAboutMe();
+        setAboutMeData(data);
+      } catch (err) {
+        console.error('Error fetching about me:', err);
+      } finally {
+        setAboutMeLoading(false);
+      }
+    };
+
+    fetchAboutMe();
+  }, []);
 
   if (loading) {
     return (
@@ -34,7 +52,7 @@ const Landing: React.FC = () => {
 
   return (
     <div>
-      <div id="home" className="container mx-auto first-section py-5 xl:px-40">
+      <div id="home" className="container mx-auto first-section py-5 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20">
         <div className="flex flex-col md:flex-row justify-start items-start pt-5 xl:space-x-16 flex-nowrap">
           
           {/* Profile Section */}
@@ -90,9 +108,16 @@ const Landing: React.FC = () => {
           {/* Biography Section */}
           <div className="w-full md:w-2/3 lg:w-3/4 flex-grow">
             <h2 className="text-xl md:text-2xl font-light">About Me</h2>
-            <p className="text-sm sm:text-base md:text-lg mt-2 font-light">
-              {personalInfo.bio}
-            </p>
+            {aboutMeLoading ? (
+              <div className="mt-2">
+                <Loader size="sm" />
+              </div>
+            ) : (
+              <div
+                className="text-sm sm:text-base md:text-lg mt-2 font-light"
+                dangerouslySetInnerHTML={{ __html: aboutMeData?.content || '' }}
+              />
+            )}
 
             {/* Sections for Education and Certifications */}
             <div className="flex flex-col md:flex-row md:space-x-8 mt-8 space-y-8 md:space-y-0">

@@ -5,3 +5,12 @@
 body {
   font-family: 'Montserrat', sans-serif;
 }
+
+/* Account for sticky header when scrolling to sections */
+html {
+  scroll-padding-top: 5rem; /* 80px to account for header height */
+}
+
+div[id], section[id] {
+  scroll-margin-top: 5rem; /* 80px margin for section anchors */
+}

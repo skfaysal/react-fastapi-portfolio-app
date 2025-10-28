@@ -1,0 +1,1 @@
+6+ years experienced Data Scientist with a demonstrated ability to deliver valuable insights via data analytics and advanced data-driven methods like Machine Learning and Deep Learning.

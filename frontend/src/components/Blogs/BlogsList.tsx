@@ -28,8 +28,8 @@ const BlogsList: React.FC = () => {
   // If loading, show a loader
   if (loading) {
     return (
-      <section id="blogs" className="py-10 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container mx-auto text-center px-4">
+      <section id="blogs" className="py-10 bg-gradient-to-b from-gray-50 to-white px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20">
+        <div className="container mx-auto text-center">
           <h2 className="text-2xl font-bold mb-8">Blogs</h2>
           <div className="flex justify-center">
             <Loader size="lg" />
@@ -45,8 +45,8 @@ const BlogsList: React.FC = () => {
   }
 
   return (
-    <section id="blogs" className="py-10 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4">
+    <section id="blogs" className="py-10 bg-gradient-to-b from-gray-50 to-white px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20">
+      <div className="container mx-auto">
         <h2 className="text-2xl font-bold text-center mb-8">Blogs</h2>
         {/* Adjust grid for potentially one item or use different layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">

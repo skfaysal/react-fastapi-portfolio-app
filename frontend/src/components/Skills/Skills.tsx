@@ -65,7 +65,7 @@ const Skills: React.FC = () => {
   }
 
   return (
-    <section id="skills" className="">
+    <section id="skills" className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20">
       <div className="container mx-auto py-4">
         <div className="text-center">
           <h1 className="text-2xl font-light pb-4">Skills</h1>

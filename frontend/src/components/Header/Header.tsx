@@ -13,9 +13,9 @@ const Header: React.FC = () => {
   const name = portfolioData?.personalInfo?.name || 'Portfolio';
 
   return (
-    <header>
-      <nav className="bg-gray-50 p-3 relative">
-        <div className="flex justify-between items-center">
+    <header className="sticky top-0 z-50">
+      <nav className="bg-white/90 backdrop-blur-sm border-b border-gray-100 px-4 py-3">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* Flex container for name and links */}
           <div className="flex items-center space-x-8">
             {/* Name section */}
@@ -49,17 +49,27 @@ const Header: React.FC = () => {
                   </a>
                 </li>
                 <li>
-                  <a 
-                    className="text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline hover:scale-110 inline-block" 
+                  <a
+                    className="text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline hover:scale-110 inline-block"
                     href="#projects"
                   >
                     Projects
                   </a>
                 </li>
+                <li>
+                  <a
+                    className="text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline hover:scale-110 inline-block"
+                    href="https://drive.google.com/file/d/1PBY5Ua49CAfNB_IU8OirNpAHI706-wFN/view?usp=drive_link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Resume
+                  </a>
+                </li>
                 {portfolioData?.blogs && portfolioData.blogs.length > 0 && (
                   <li>
-                    <a 
-                      className="text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline hover:scale-110 inline-block" 
+                    <a
+                      className="text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline hover:scale-110 inline-block"
                       href="#blogs"
                     >
                       Blogs
@@ -119,18 +129,29 @@ const Header: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a 
-                  className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline" 
+                <a
+                  className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline"
                   href="#projects"
                   onClick={() => setIsOpen(false)}
                 >
                   Projects
                 </a>
               </li>
+              <li>
+                <a
+                  className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline"
+                  href="https://drive.google.com/file/d/1PBY5Ua49CAfNB_IU8OirNpAHI706-wFN/view?usp=drive_link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Resume
+                </a>
+              </li>
               {portfolioData?.blogs && portfolioData.blogs.length > 0 && (
                 <li>
-                  <a 
-                    className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline" 
+                  <a
+                    className="block text-sm text-gray-500 hover:text-gray-600 no-underline hover:no-underline"
                     href="#blogs"
                     onClick={() => setIsOpen(false)}
                   >

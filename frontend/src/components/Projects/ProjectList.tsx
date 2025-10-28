@@ -65,7 +65,7 @@ const ProjectList: React.FC = () => {
   }
   
   return (
-    <div id="projects" className="project-section bg-gray-100 rounded-lg py-4">
+    <div id="projects" className="project-section bg-gray-100 rounded-lg py-4 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20">
       <div className="container mx-auto">
         <div className="text-center mb-2">
           <h1 className="text-2xl font-light mb-0">Projects</h1>

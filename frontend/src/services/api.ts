@@ -15,7 +15,7 @@ import {
 
 // Configure axios with default settings
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://0.0.0.0:8000',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -217,6 +217,45 @@ export const sendChatMessage = async (query: string): Promise<ChatResponse> => {
   }
 };
 
+export interface AboutMeData {
+  content: string;
+  raw_markdown: string;
+}
+
+export const getAboutMe = async (): Promise<AboutMeData> => {
+  try {
+    const response = await apiClient.get<ApiResponse<AboutMeData>>('/api/about-me');
+    return response.data.data;
+  } catch (error) {
+    // Fallback to mock data if API fails
+    return {
+      content: getMockAboutMeContent(),
+      raw_markdown: getMockAboutMeContent()
+    };
+  }
+};
+
+const getMockAboutMeContent = (): string => {
+  return `<h1>About Me</h1>
+<p>I am a <strong>Senior Machine Learning Engineer</strong> with over 5 years of experience in data science and machine learning. I specialize in delivering valuable insights through advanced data analytics and cutting-edge techniques in Machine Learning and Deep Learning.</p>
+<h2>Key Expertise</h2>
+<ul>
+<li><strong>Machine Learning</strong>: Building predictive models and algorithms</li>
+<li><strong>Deep Learning</strong>: Neural networks, computer vision, and NLP applications</li>
+<li><strong>Data Analytics</strong>: Extracting insights from complex datasets</li>
+<li><strong>MLOps</strong>: Productionizing ML models and managing ML lifecycles</li>
+</ul>
+<h2>Professional Background</h2>
+<p>With a strong foundation in computer science and a passion for solving complex problems, I have successfully led multiple projects involving:</p>
+<ul>
+<li>Computer vision applications for medical imaging</li>
+<li>Natural language processing for text analysis</li>
+<li>Predictive modeling for business intelligence</li>
+<li>ML pipeline development and deployment</li>
+</ul>
+<p>I'm passionate about leveraging data to drive meaningful outcomes and continuously learning about emerging technologies in the AI/ML space.</p>`;
+};
+
 // Legacy method for backwards compatibility
 export const getPortfolioData = async (): Promise<PortfolioData> => {
   try {
@@ -264,7 +303,7 @@ export const getMockPortfolioData = (): PortfolioData => {
       socialLinks: {
         github: "https://github.com/skfaysal",
         linkedin: "https://www.linkedin.com/in/md-faysal-030800147/",
-        cv: "/CV-SheikhMdFaysal.pdf",
+        // cv: "https://drive.google.com/file/d/1PBY5Ua49CAfNB_IU8OirNpAHI706-wFN/view?usp=drive_link",
         email: "mailto:skmdfaysal@gmail.com"
       }
     },

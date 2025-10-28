@@ -64,7 +64,7 @@ const Experience: React.FC = () => {
   return (
     <div
       id="experience"
-      className="bg-gray-50 sm:px-1 md:px-5 xl:px-20 rounded-lg"
+      className="bg-gray-50 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 rounded-lg"
     >
       <div className="container py-4">
         <div className="flex flex-col lg:flex-row first-letter">
